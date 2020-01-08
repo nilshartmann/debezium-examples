@@ -1,0 +1,53 @@
+#scalar Date
+
+type User {
+  id: ID!
+  name: String!
+
+  posts: [Post!]!
+  # posts(limitBy: "erste-zehn"): [Post!]!
+
+  # tickets: [Ticket!]!
+}
+
+type Post {
+  id: ID!
+  publishedAt: String!
+  authoredBy: User!
+
+  title: String!
+  body: String!
+
+  tags: [String!]!
+}
+
+#type Ticket {
+#  id: ID!
+
+#  title: String!
+#  description: String!
+#  createdAt: Date!
+
+#  assignedTo: User!
+
+#}
+
+type Query {
+  user(userId: ID!): User
+
+  #posts(byTag: ...): [Post]
+}
+
+#input NewUserInput {
+#  name: String!
+#  email: String!
+#}
+
+#type SaveUserResult {
+#  newUser: User
+#  error: String
+#}
+
+#type Mutation {
+#  saveUser(newUser: NewUserInput!): User!
+#}

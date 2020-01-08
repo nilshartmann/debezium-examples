@@ -1,30 +1,23 @@
-# debezium-graphql-aggregator project
+* Start MongoDB:
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
 ```
-./mvnw quarkus:dev
+docker run -ti --rm -p 27017:27017 mongo:4.0
 ```
 
-## Packaging and running the application
+* Start app:
 
-The application is packageable using `./mvnw package`.
-It produces the executable `debezium-graphql-aggregator-1.0.0-SNAPSHOT-runner.jar` file in `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+```
+./mvnw compile quarkus:dev
+```
 
-The application is now runnable using `java -jar target/debezium-graphql-aggregator-1.0.0-SNAPSHOT-runner.jar`.
+* Create a User:
 
-## Creating a native executable
+```
+http POST localhost:8080/users id=42 name="Bob the Builder"
+```
 
-You can create a native executable using: `./mvnw package -Pnative`.
+* Query a User using GraphQL:
 
-Or you can use Docker to build the native executable using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your binary: `./target/debezium-graphql-aggregator-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
+```
+http POST localhost:8080/graphql <<< '{"query": "query UserQuery($userId: ID!){user(userId: $userId) { id name }}", "variables": { "userId": "42" } }'
+```
